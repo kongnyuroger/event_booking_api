@@ -13,7 +13,7 @@ export async function createTables() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
     `);
-    
+
 
     //refresh token
     await pool.query(`
@@ -53,8 +53,8 @@ export async function createTables() {
       );
     `);
 
-    console.log("✅ All tables created successfully (if not exist).");
+    console.log("All tables created successfully (if not exist).");
   } catch (err) {
-    console.error("❌ Error creating tables:", err);
+    console.error(" Error creating tables:", err);
   }
 }

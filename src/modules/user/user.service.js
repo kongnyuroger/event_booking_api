@@ -1,54 +1,54 @@
-import { createUser, findUser } from "./user.model.js";
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 
-export const userService = {
-    async createUser(reqbody){
-        if (!reqbody.name || !reqbody.password || !reqbody.email) {
-            throw new Error( 'name , password and email required' );
-        }
-        const userExist = await findUser(reqbody.email)
-        if(userExist){
-            throw new Error("User already exists with this email");
-        }
-        if(reqbody.password.length < 8){
-            throw new Error("password must be at least 8 characters");
-        }
-        const hashedPassword = await bcrypt.hash(reqbody.password, 10)
-        reqbody.password = hashedPassword
-        const result = {
-            message: 'registration successful',
-            user: await createUser(reqbody)
-        }
-        return  result 
-    },
+import { createUser, findUser } from './user.model.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from "dotenv";
+dotenv.config();
 
-    async loginUser(reqbody){
-        
-        const user = await findUser(reqbody.email)
-        if(!user){
-            throw new Error(`User with email ${reqbody.email} does not exist`);
-        }
-    
-        const password = await bcrypt.compare(reqbody.password, user.password_hash)
-        if(!password){ 
-            throw new Error ("password is incorrect")
-        }
 
-        const token = jwt.sign(
-            { id: user.id, username: user.name , email: user.email},
-            'my_secretkey',
-            { expiresIn: '6h' }
-        );
-        const result = {
-            message: 'Login successful', 
-            token
-        }
-        return result;
 
-    },
+const ACCESS_EXPIRES = '1h';            
+const ACCESS_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
-   
+
+if (!ACCESS_SECRET) {
+  throw new Error('Missing ACCESS_TOKEN_SECRET env var');
 }
 
+function generateAccessToken(user) {
 
+  return jwt.sign(
+    { id: user.id, username: user.username },
+    ACCESS_SECRET,
+    { expiresIn: ACCESS_EXPIRES }
+  );
+}
+
+export const userService = {
+  async register({ name, email, password }) {
+    if (!name || !email || !password) throw new Error('name, email and password required');
+    if (password.length < 8) throw new Error('Password must be >= 8 characters');
+
+    const existing = await findUser(email);
+    if (existing) throw new Error('User already exists with this email');
+
+    const password_hash = await bcrypt.hash(password, 10);
+    const user = await createUser({ name, email, password_hash });
+
+    
+    const accessToken = generateAccessToken(user);
+    return { message: 'Registration successful', user, accessToken };
+  },
+
+  async login({ email, password }) {
+    const user = await findUser(email);
+    if (!user) throw new Error(`User with email ${email} does not exist`);
+
+    const ok = await bcrypt.compare(password, user.password_hash);
+    if (!ok) throw new Error('Password is incorrect');
+
+    const accessToken = generateAccessToken(user);
+    
+    return { message: 'Login successful', user, accessToken };
+  }
+};
