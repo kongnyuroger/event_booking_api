@@ -9,7 +9,7 @@ import cors from 'cors'
 
 import indexRouter  from './routes/index.js';
 import usersRouter from  './modules/user/user.routes.js';
-//import postsRouter from './modules/post/post.routes.js';
+import eventsRouter from './modules/events/event.routes.js';
 //import commentRouter from './modules/comment/comment.routes.js';
 
 
@@ -27,7 +27,7 @@ app.use(cors)
 
 app.use('/',indexRouter);
 app.use('/auth', usersRouter);
-//app.use('/posts',postsRouter);
+app.use('/event',eventsRouter);
 //app.use('/comments', commentRouter)
 
 // catch 404 and forward to error handler
