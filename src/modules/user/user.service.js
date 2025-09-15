@@ -33,7 +33,7 @@ export const userService = {
     if (existing) throw new Error('User already exists with this email');
 
     const password_hash = await bcrypt.hash(password, 10);
-    const user = await createUser({ name, email, password_hash });
+    const user = await createUser({ name, email, password_hash});
 
     
     const accessToken = generateAccessToken(user);
@@ -49,6 +49,6 @@ export const userService = {
 
     const accessToken = generateAccessToken(user);
     
-    return { message: 'Login successful', user, accessToken };
-  }
+    return { username: user.username, email: user.email, accessToken };
+  },
 };
