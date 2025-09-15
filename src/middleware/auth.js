@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken'
+import dotenv from "dotenv";
+dotenv.config();
 
 
 function authenticateToken (req, res, next) {
@@ -9,7 +11,7 @@ function authenticateToken (req, res, next) {
      if (!token) {
     return res.status(401).json({ error: 'No token provided' });
     }
-    jwt.verify(token, 'my_secretkey', (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) return res.status(403).json({ error: 'Invalid token' });
         req.user = user;
         next();

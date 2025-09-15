@@ -1,4 +1,4 @@
-// src/modules/bookings/booking.service.js
+
 import {
   createBooking,
   findBookingsByUser,

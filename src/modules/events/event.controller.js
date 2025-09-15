@@ -2,14 +2,21 @@
 import { eventService } from "./event.service.js";
 
 export const eventController = {
-  async listEvents(req, res) {
-    try {
-      const events = await eventService.listEvents(req.query);
-      res.json(events);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
-    }
-  },
+
+async getEvents(req, res, next) {
+  try {
+    const { page, limit, start, end } = req.query;
+    const events = await eventService.listEvents({ 
+      page: parseInt(page) || 1, 
+      limit: parseInt(limit) || 10, 
+      start, 
+      end 
+    });
+    res.json(events);
+  } catch (err) {
+    next(err);
+  }
+},
 
   async getEvent(req, res) {
     try {
