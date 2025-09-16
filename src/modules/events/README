@@ -1,0 +1,64 @@
+# Event Booking API
+
+A backend API for event management and bookings built with **Node.js**, **Express**, and **PostgreSQL**.  
+Supports authentication with **JWT**, secure password hashing, and seat-limited event booking with concurrency control.
+
+---
+
+##  Features
+- User registration & login with JWT authentication.
+- Password hashing with **bcryptjs**.
+- Event management (CRUD) with seat limits.
+- Secure booking system preventing overbooking using transactions.
+- Protected routes (only event creators can edit their events).
+- Pagination & date-based filtering for event listings.
+- User-specific booking management (list & cancel).
+- Tested against concurrent booking requests.
+
+---
+
+## 📦 Setup
+
+### 1. Clone & Install
+```bash
+git clone <repo-url>
+cd event-booking-api
+npm install
+
+
+ API ENDPOINTS
+
+Auth
+
+POST /auth/register → Register new user
+
+POST /auth/login → Login user
+
+Events
+
+GET /events?limit=10&offset=0&start=2025-09-01&end=2025-10-01 → List events (filter + pagination)
+
+GET /events/:id → Get single event with booking summary
+
+POST /events → Create event (protected)
+
+PUT /events/:id → Update event (protected, only owner)
+
+Bookings
+
+POST /events/:id/book → Book seats (protected)
+
+GET /bookings → List current user’s bookings
+
+DELETE /bookings/:id → Cancel booking
+
+
+# Register
+curl -X POST -----/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"alice","email":"alice@example.com","password":"password123"}'
+
+# Login
+curl -X POST ------/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"alice@example.com","password":"password123"}'

@@ -2,15 +2,18 @@
 import pool from "../../config/db.js";
 
 
-export async function findEvents(start, end) {
+export async function findEvents(start, end, limit, offset) {
   if (start && end) {
     const result = await pool.query(
-      `SELECT * FROM events WHERE date BETWEEN $1 AND $2 ORDER BY date ASC`,
-      [start, end]
+      `SELECT * FROM events 
+       WHERE date BETWEEN $1 AND $2 
+       ORDER BY date ASC 
+       LIMIT $3 OFFSET $4`,
+      [start, end, limit, offset]
     );
     return result.rows;
   } else {
-    const result = await pool.query(`SELECT * FROM events ORDER BY date ASC`);
+    const result = await pool.query(`SELECT * FROM events ORDER BY date ASC LIMIT $1 OFFSET $2`,[limit, offset]);
     return result.rows;
   }
 }

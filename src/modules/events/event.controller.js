@@ -5,10 +5,10 @@ export const eventController = {
 
 async getEvents(req, res, next) {
   try {
-    const { page, limit, start, end } = req.query;
+    const { limit, offset, start, end } = req.query;
     const events = await eventService.listEvents({ 
-      page: parseInt(page) || 1, 
-      limit: parseInt(limit) || 10, 
+      offset: parseInt(offset) || 0, 
+      limit: parseInt(limit) || 5, 
       start, 
       end 
     });

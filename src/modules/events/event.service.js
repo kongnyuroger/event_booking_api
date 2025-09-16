@@ -10,8 +10,8 @@ import {
 
 export const eventService = {
   async listEvents(query) {
-    const { start, end } = query;
-    return await findEvents(start, end);
+    const { start, end, limit, offset } = query;
+    return await findEvents(start, end, limit, offset );
   },
 
   async getEvent(id) {
