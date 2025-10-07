@@ -1,6 +1,7 @@
 import createError from 'http-errors'; 
 import path from 'path'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 import logger from 'morgan';
 import express from 'express';
 import { createTables } from './config/dbinit.js';
@@ -18,11 +19,18 @@ const app = express();
 // view engine setup
 createTables()
 app.set('view engine', 'jade');
-
+app.use(cors(
+  {
+    origin: '*',
+    methods: ['GET', 'POST','PUT','DELETE'],
+    credentials: true
+  }
+))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 
 //app.use('/',indexRouter);
 app.use('/auth', usersRouter);
