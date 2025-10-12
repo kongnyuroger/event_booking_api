@@ -49,6 +49,6 @@ export const userService = {
 
     const accessToken = generateAccessToken(user);
     
-    return { username: user.username, email: user.email, accessToken };
+    return { username: user.username, email: user.email, userId: user.id, accessToken };
   },
 };

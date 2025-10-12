@@ -12,6 +12,20 @@ async getEvents(req, res, next) {
       start, 
       end 
     });
+  
+    res.json(events);
+  } catch (err) {
+    next(err);
+  }
+},
+async getEventsLoginUser(req, res, next) {
+  try {
+    const id = req.user.id
+    console.log(id)
+    const events = await eventService.listCurrentUserEvents(
+     id
+    );
+  
     res.json(events);
   } catch (err) {
     next(err);

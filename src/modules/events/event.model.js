@@ -18,6 +18,12 @@ export async function findEvents(start, end, limit, offset) {
   }
 }
 
+export async function getCurrentUserEvents(id) {
+       const result = await pool.query(`SELECT * FROM events  where events.created_by = $1
+        ORDER BY date ASC`,[id]);
+        return result.rows;
+}
+
 export async function findEventById(id) {
   const result = await pool.query(
     `

@@ -4,7 +4,8 @@ import {
   findEventById,
   createEvent,
   updateEvent,
-  getBookedSeats
+  getBookedSeats,
+  getCurrentUserEvents
 } from "./event.model.js";
 
 
@@ -12,6 +13,9 @@ export const eventService = {
   async listEvents(query) {
     const { start, end, limit, offset } = query;
     return await findEvents(start, end, limit, offset );
+  },
+ async listCurrentUserEvents(id) {
+    return await getCurrentUserEvents(id);
   },
 
   async getEvent(id) {
