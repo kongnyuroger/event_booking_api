@@ -5,7 +5,8 @@ import {
   createEvent,
   updateEvent,
   getBookedSeats,
-  getCurrentUserEvents
+  getCurrentUserEvents,
+  searchEvents
 } from "./event.model.js";
 
 
@@ -38,6 +39,16 @@ export const eventService = {
 
     return await createEvent({ title, description, date: eventDate, total_seats, created_by: userId });
   },
+
+  async search(query) {
+        const { q, limit, offset } = query;
+        if (!q || q.trim() === "") {
+            throw new Error("Query 'q' is required for search");
+        }
+        console.log("search term", q)
+        return await searchEvents(q, limit, offset)
+        
+        },
 
   async updateEvent(id, reqBody, userId) {
     const event = await findEventById(id);

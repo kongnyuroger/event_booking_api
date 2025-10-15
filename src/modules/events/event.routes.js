@@ -6,7 +6,9 @@ import authenticateToken from "../../middleware/auth.js";
 const router = Router();
 
 router.get("/", eventController.getEvents);
+router.get("/", eventController.getEvents);
 router.post("/", authenticateToken, eventController.createEvent);
+router.get("/search", eventController.searchingEvents);
 router.get("/user", authenticateToken ,eventController.getEventsLoginUser);
 router.get("/:id", eventController.getEvent);
 router.put("/:id", authenticateToken, eventController.updateEvent);

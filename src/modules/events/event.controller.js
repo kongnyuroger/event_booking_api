@@ -18,6 +18,22 @@ async getEvents(req, res, next) {
     next(err);
   }
 },
+
+async searchingEvents(req, res, next) {
+  try {
+    const {q, limit, offset,  } = req.query;
+    const events = await eventService.search({ 
+      q,
+      offset: parseInt(offset) || 0, 
+      limit: parseInt(limit) || 6, 
+    });
+  
+    res.json(events);
+  } catch (err) {
+    next(err);
+  }
+},
+
 async getEventsLoginUser(req, res, next) {
   try {
     const id = req.user.id

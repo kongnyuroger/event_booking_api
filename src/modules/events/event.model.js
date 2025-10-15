@@ -69,3 +69,16 @@ export async function getBookedSeats(eventId) {
   );
   return result.rows[0].booked;
 }
+
+export async function searchEvents(q, limit, offset) {
+  const result = await pool.query(
+    `SELECT *
+     FROM events
+     WHERE title ILIKE $1
+     ORDER BY created_at DESC LIMIT $2 OFFSET $3
+     `,
+    [`%${q}%`, limit, offset]
+
+  );
+  return result.rows;
+}
